@@ -43,6 +43,12 @@ jobs:
         run: bundle exec rails test
 
       - name: Archive AppMaps
+        if: github.event_name != 'pull_request'
         uses: getappmap/archive-action@feat/summary-report
+
+      - name: Analyze AppMaps
+        uses: getappmap/analyze-action@feat/summary-report
+        if: github.event_name == 'pull_request'
         with:
-          revision: ${{ github.event.pull_request.base.sha }}
+          base-revision: ${{ github.event.pull_request.base.sha }}
+          head-revision: ${{ github.event.pull_request.head.sha }}
